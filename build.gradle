@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+repositories {
+    mavenLocal()
+    maven { url('https://repo.maven.apache.org/maven2/') }
+}
+
+dependencies {
+    implementation 'org.eclipse.jetty:jetty-server:9.4.40.v20210413'
+    implementation 'org.eclipse.jetty:jetty-servlet:9.4.40.v20210413'
+    implementation 'org.python:jython:2.7.2'
+}
+
+group = 'bonjour'
+version = '1.0-SNAPSHOT'
+description = 'Jetty Server'
+
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+shadowJar {
+    archiveName 'uber.jar'
+    exclude '*.py'
+}
+
+jar {
+
+    finalizedBy shadowJar
+    manifest {
+        attributes "Main-Class": "bonjour.HttpServer"
+    }
+
+}
